@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema= new mongoose.Schema({
+    avatar: {
+    type: String,
+    default: ""
+},
      name: {
         type: String,
         required: true,
@@ -20,7 +24,9 @@ const userSchema= new mongoose.Schema({
         required: true,
         minlength: 6
     },
-
+passwordChangedAt: { 
+    type: Date
+ },
     role: {
         type: String,
         enum: ["employee", "manager", "admin"],
@@ -36,7 +42,16 @@ const userSchema= new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
-    }
+    },
+    isVerified: { type: Boolean, default: false },
+    preferences: {
+  theme: { type: String, enum: ["light", "dark", "system"], default: "system" },
+  language: { type: String, default: "en" },
+  emailNotifications: {
+    requestUpdates: { type: Boolean, default: true },
+    taskAssigned: { type: Boolean, default: true },
+  },
+},
 })
 const User = mongoose.model("User", userSchema);
 

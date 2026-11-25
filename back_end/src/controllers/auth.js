@@ -1,12 +1,13 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { createAndSendOtp } = require("./otp");
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
       return res.status(401).json({
@@ -20,14 +21,27 @@ const login = async (req, res) => {
       });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
       return res.status(401).json({
         message: "Invalid email or password",
+      });
+    }
+
+    // الباسورد صح بس الإيميل لسه متأكدش
+    if (!user.isVerified) {
+      // نبعت كود جديد تلقائياً (لو في cooldown مش هيحصل حاجة وده عادي)
+      try {
+        await createAndSendOtp(user.email, "verify_email");
+      } catch (mailError) {
+        console.error("Failed to send OTP on login:", mailError);
+      }
+
+      return res.status(403).json({
+        message: "Please verify your email first",
+        needsVerification: true,
+        email: user.email,
       });
     }
 
@@ -46,7 +60,6 @@ const login = async (req, res) => {
       message: "Login successful",
       token,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -56,18 +69,13 @@ const login = async (req, res) => {
   }
 };
 
-
 const register = async (req, res) => {
   try {
-    const {
-      name,
-      email,
-      password,
-      department
-    } = req.body;
+    const { name, email, password, department } = req.body;
+    const normalizedEmail = email.toLowerCase();
 
     // Check if email already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
     if (existingUser) {
       return res.status(409).json({
@@ -78,26 +86,31 @@ const register = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Create user (غير متفعل لحد ما يدخل الـ OTP)
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       department,
       role: "employee",
       isActive: true,
+      isVerified: false,
     });
+
+    // نبعت الـ OTP بعد إنشاء اليوزر
+    try {
+      await createAndSendOtp(user.email, "verify_email");
+    } catch (mailError) {
+      // اليوزر اتعمل، بس الإيميل فشل: يقدر يعمل Resend من صفحة الـ verify
+      console.error("Failed to send OTP on register:", mailError);
+    }
 
     res.status(201).json({
-      message: "Registration successful",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      message:
+        "Registration successful. Please check your email for the verification code.",
+      needsVerification: true,
+      email: user.email,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -107,12 +120,10 @@ const register = async (req, res) => {
   }
 };
 
-
 // Get current logged-in user
 const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId)
-      .select("-password");
+    const user = await User.findById(req.user.userId).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -124,7 +135,6 @@ const getMe = async (req, res) => {
       message: "User profile retrieved successfully",
       user,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -134,9 +144,8 @@ const getMe = async (req, res) => {
   }
 };
 
-
 module.exports = {
   login,
   register,
-  getMe
+  getMe,
 };
