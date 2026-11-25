@@ -1,0 +1,531 @@
+
+/* ================================
+   NAVBAR
+================================ */
+/* Navbar */
+.topbar > div {
+  width: 100%;
+}
+
+.workspace-home-link {
+  text-decoration: none;
+  color: var(--text-color, #212529);
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+  margin-right: auto;
+}
+
+/* Icons Group */
+.topbar > div > .d-flex.align-items-center.gap-3 {
+  margin-left: 40px;
+  gap: 24px !important;
+  flex-shrink: 0;
+}
+
+
+/* ================================
+   THEME BUTTON
+================================ */
+
+.theme-button,
+.notification-button {
+  position: relative;
+  border: none;
+  background: transparent;
+  color: var(--text-color, #333);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.theme-button:hover,
+.notification-button:hover {
+  background: var(--hover-bg, #f1f1f1);
+  color: #950020;
+}
+
+/* ================================
+   NOTIFICATIONS
+================================ */
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -3px;
+  right: -4px;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #dc3545;
+  color: white;
+
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 50%;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+
+  width: 360px;
+  max-width: calc(100vw - 30px);
+  max-height: 450px;
+
+  background: var(--card-bg, #ffffff);
+  color: var(--text-color, #212529);
+
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 12px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+  overflow: hidden;
+  z-index: 1100;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.notification-header strong {
+  display: block;
+  font-size: 14px;
+}
+
+.notification-header small {
+  display: block;
+  margin-top: 3px;
+  color: var(--secondary-text, #777);
+  font-size: 11px;
+}
+
+.mark-all-btn {
+  border: none;
+  background: transparent;
+  color: #950020;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mark-all-btn:hover {
+  text-decoration: underline;
+}
+
+.notification-list {
+  max-height: 370px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  padding: 14px 15px;
+
+  border-bottom: 1px solid var(--border-color, #eeeeee);
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: var(--hover-bg, #f8f8f8);
+}
+
+.notification-item.unread {
+  background: var(--unread-bg, #fff5f6);
+}
+
+.notification-icon {
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f8e6ea;
+  color: #950020;
+  border-radius: 50%;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-color, #333);
+}
+
+.notification-content small {
+  display: block;
+  margin-top: 5px;
+  color: var(--secondary-text, #888);
+  font-size: 10px;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  margin-top: 5px;
+
+  background: #950020;
+  border-radius: 50%;
+}
+
+.empty-notifications {
+  padding: 35px 15px;
+  text-align: center;
+  color: var(--secondary-text, #888);
+}
+
+.empty-notifications i {
+  font-size: 25px;
+}
+
+.empty-notifications p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+
+/* ================================
+   PROFILE
+================================ */
+
+.profile-link {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text-color, #333);
+  text-decoration: none;
+
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.profile-link:hover {
+  color: #950020;
+}
+
+.nav-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 250px;
+  height: 100vh;
+
+  background: var(--sidebar-bg, #ffffff);
+  color: var(--text-color, #212529);
+
+  border-right: 1px solid var(--border-color, #e5e7eb);
+
+  z-index: 1050;
+}
+
+/* Brand */
+.brand {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+
+  color: #950020;
+  cursor: pointer;
+
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.brand-icon {
+  color: #950020;
+  font-size: 23px;
+}
+
+.brand span {
+  font-size: 15px;
+  font-weight: 700;
+  color: #950020;
+}
+
+/* ================================
+   SIDEBAR NAV LINKS
+================================ */
+
+.sidebar .nav {
+  margin-top: 20px;
+}
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 15px;
+  margin-bottom: 4px;
+
+  color: var(--text-color, #555);
+  text-decoration: none;
+
+  border-radius: 8px;
+  font-size: 14px;
+
+  transition: all 0.2s ease;
+}
+
+.sidebar .nav-link i {
+  font-size: 17px;
+  width: 22px;
+}
+
+.sidebar .nav-link:hover {
+  background: #f8e6ea;
+  color: #950020;
+}
+
+.sidebar .nav-link.active {
+  background: #f8e6ea;
+  color: #950020;
+  font-weight: 600;
+}
+
+/* ================================
+   LOGOUT
+================================ */
+
+.logout-btn {
+  padding: 11px;
+  border: 1px solid #950020;
+
+  background: transparent;
+  color: #950020;
+
+  border-radius: 8px;
+  font-size: 14px;
+
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #950020;
+  color: #ffffff;
+}
+
+/* ================================
+   RESPONSIVE SIDEBAR
+================================ */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    width: 70px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding: 15px 5px !important;
+  }
+
+  .brand span,
+  .sidebar .nav-link span {
+    display: none;
+  }
+
+  .sidebar .nav-link {
+    justify-content: center;
+    padding: 12px 5px;
+  }
+
+  .sidebar .nav-link i {
+    width: auto;
+    font-size: 19px;
+  }
+
+  .sidebar .nav {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .brand-icon {
+    font-size: 24px;
+  }
+}
+
+
+
+/* ================================
+   LOGOUT
+================================ */
+
+.logout-btn {
+  padding: 2px;
+  border: 1px solid #950020;
+
+  background: transparent;
+  color: #950020;
+
+  border-radius: 8px;
+  font-size: 10px;
+font-weight: bolder;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #950020;
+  color: #ffffff;
+}
+
+
+/* ================================
+   MAIN CONTENT
+================================ */
+
+:host {
+  display: block;
+}
+
+.main-content {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+.content {
+  padding: 24px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+  .topbar {
+    left: 70px;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .topbar h6 ,.topbar small{
+   display: none;
+
+  }
+
+  .sidebar {
+    width: 70px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding: 15px 5px !important;
+  }
+
+  .brand span,
+  .sidebar .nav-link span {
+    display: none;
+  }
+
+  .sidebar .nav-link {
+    justify-content: center;
+    padding: 12px 5px;
+  }
+
+  .sidebar .nav-link i {
+    width: auto;
+    font-size: 19px;
+  }
+
+  .sidebar .nav {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .brand-icon {
+    font-size: 24px;
+  }
+
+  .main-content {
+    margin-left: 70px;
+  }
+
+  .notification-dropdown {
+    width: 320px;
+    right: -45px;
+  }
+
+  .workspace-home-link h6 {
+    font-size: 13px;
+  }
+
+  .workspace-home-link small {
+    font-size: 10px;
+  }
+
+  .content {
+    padding: 15px !important;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .workspace-home-link small {
+    display: none;
+  }
+
+  .topbar {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .notification-dropdown {
+    width: 290px;
+    right: -40px;
+  }
+}
+

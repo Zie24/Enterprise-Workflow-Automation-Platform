@@ -1,0 +1,260 @@
+<!-- Navbar -->
+<header class="topbar px-4 py-3">
+
+  <div class="d-flex justify-content-between align-items-center">
+
+    <!-- Brand / Home -->
+      <div>
+        <h6 class="mb-0 fw-semibold">Enterprise Workspace</h6>
+        <small>Workflow Management Platform</small>
+      </div>
+
+    <div class="d-flex align-items-center gap-3">
+
+      <!-- Theme Toggle -->
+      <button
+        type="button"
+        class="theme-button"
+        [attr.aria-label]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+        (click)="toggleTheme()">
+
+        <i
+          class="bi"
+          [class]="themeService.isDark() ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill'">
+        </i>
+
+      </button>
+
+      <!-- Notifications -->
+      <div class="notification-wrapper">
+
+        <button
+          type="button"
+          class="notification-button"
+          (click)="toggleNotifications()">
+
+          <i class="bi bi-bell fs-5"></i>
+
+          @if (unreadCount > 0) {
+            <span class="notification-badge">
+              {{ unreadCount }}
+            </span>
+          }
+
+        </button>
+
+        @if (showNotifications) {
+
+          <div class="notification-dropdown">
+
+            <div class="notification-header">
+
+              <div>
+                <strong>Notifications</strong>
+
+                @if (unreadCount > 0) {
+                  <small>{{ unreadCount }} unread</small>
+                }
+              </div>
+
+              @if (unreadCount > 0) {
+                <button
+                  type="button"
+                  class="mark-all-btn"
+                  (click)="markAllAsRead()">
+
+                  Mark all as read
+
+                </button>
+              }
+
+            </div>
+
+            <div class="notification-list">
+
+              @if (notifications.length === 0) {
+
+                <div class="empty-notifications">
+                  <i class="bi bi-bell-slash"></i>
+                  <p>No notifications</p>
+                </div>
+
+              } @else {
+
+                @for (notification of notifications; track notification._id) {
+
+                  <div
+                    class="notification-item"
+                    [class.unread]="!notification.isRead"
+                    (click)="markAsRead(notification)">
+
+                    <div class="notification-icon">
+
+                      @if (notification.type === 'new_request') {
+                        <i class="bi bi-file-earmark-plus"></i>
+                      }
+
+                      @if (notification.type === 'request_approved') {
+                        <i class="bi bi-check-circle"></i>
+                      }
+
+                      @if (notification.type === 'request_rejected') {
+                        <i class="bi bi-x-circle"></i>
+                      }
+
+                    </div>
+
+                    <div class="notification-content">
+
+                      <p>{{ notification.message }}</p>
+
+                      <small>
+                        {{ notification.createdAt | date:'short' }}
+                      </small>
+
+                    </div>
+
+                    @if (!notification.isRead) {
+                      <span class="unread-dot"></span>
+                    }
+
+                  </div>
+
+                }
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+      <!-- Profile -->
+      <a
+        routerLink="/account"
+        class="profile-link"
+        title="My Account">
+
+        @if (settingsService.avatar()) {
+
+          <img
+            [src]="apiOrigin + settingsService.avatar()"
+            alt="Profile"
+            class="nav-avatar"
+          />
+
+        } @else {
+
+          <i class="bi bi-person-circle fs-4"></i>
+
+        }
+
+      </a>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- Sidebar -->
+<aside class="sidebar d-flex flex-column">
+
+  <!-- Brand -->
+  <div class="brand p-4">
+    <a  class="workspace-home-link">
+
+    <div routerLink="/landing"  class="d-flex align-items-center gap-2">
+      <i class="bi bi-diagram-3-fill brand-icon"></i>
+      <span class="fw-bold">Enterprise Workspace</span>
+    </div>
+    </a>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav flex-column px-3 gap-1">
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link">
+
+      <i class="bi bi-grid-1x2-fill"></i>
+      <span>Dashboard</span>
+
+    </a>
+
+    <a
+      routerLink="/requests"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link">
+
+      <i class="bi bi-file-earmark-text-fill"></i>
+      <span>Requests</span>
+
+    </a>
+
+    <a
+      routerLink="/requests/create"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <i class="bi bi-plus-circle-fill"></i>
+      <span>Create Request</span>
+
+    </a>
+
+    <a
+      routerLink="/tasks"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <i class="bi bi-check2-square"></i>
+      <span>Tasks</span>
+
+    </a>
+
+    <a
+      routerLink="/teams"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <i class="bi bi-people"></i>
+      <span>Teams</span>
+
+    </a>
+
+    <a
+      routerLink="/settings"
+      routerLinkActive="active"
+      class="nav-link">
+
+      <i class="bi bi-gear-fill"></i>
+      <span>Settings</span>
+
+    </a>
+
+  </nav>
+
+  <!-- Logout -->
+  <div class="mt-auto p-3">
+
+    <button
+      type="button"
+      class="btn logout-btn w-100"
+      (click)="logout()">
+
+      <i class="bi bi-box-arrow-right me-2"></i>
+      Logout
+
+    </button>
+
+  </div>
+
+</aside>

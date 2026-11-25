@@ -1,0 +1,499 @@
+<div class="tasks-page">
+
+  <!-- Header -->
+
+  <div class="page-header">
+
+    <div>
+
+      <p class="section-label">
+        WORK MANAGEMENT
+      </p>
+
+      <h1>Tasks</h1>
+
+      <p class="page-subtitle">
+        View and manage tasks.
+      </p>
+
+    </div>
+
+
+    @if (
+      currentUserRole === 'manager' ||
+      currentUserRole === 'admin'
+    ) {
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openCreateTask()">
+
+        <i class="bi bi-clipboard-plus me-2"></i>
+
+        Create Task
+
+      </button>
+
+    }
+
+  </div>
+
+
+  <!-- Create Task Form -->
+
+  @if (showCreateForm) {
+
+    <div class="create-task-card">
+
+      <div
+        class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+          <p class="section-label">
+            WORK MANAGEMENT
+          </p>
+
+          <h2 class="mb-1">
+            Assign Task
+          </h2>
+
+          <p class="text-muted mb-0">
+            Create a new task and assign it to an employee.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeCreateTask()">
+        </button>
+
+      </div>
+
+
+      <!-- Error -->
+
+      @if (createTaskError) {
+
+        <div class="alert alert-danger">
+
+          <i class="bi bi-exclamation-circle me-2"></i>
+
+          {{ createTaskError }}
+
+        </div>
+
+      }
+
+
+      <!-- Success -->
+
+      @if (createTaskSuccess) {
+
+        <div class="alert alert-success">
+
+          <i class="bi bi-check-circle me-2"></i>
+
+          {{ createTaskSuccess }}
+
+        </div>
+
+      }
+
+
+      <form
+        #taskFormRef="ngForm"
+        (ngSubmit)="createTask()">
+
+
+        <!-- Title -->
+
+        <div class="mb-3">
+
+          <label
+            for="taskTitle"
+            class="form-label">
+
+            Task Title
+
+          </label>
+
+          <input
+            id="taskTitle"
+            type="text"
+            class="form-control"
+            name="title"
+            [(ngModel)]="taskForm.title"
+            required
+            placeholder="Enter task title">
+
+        </div>
+
+
+        <!-- Description -->
+
+        <div class="mb-3">
+
+          <label
+            for="taskDescription"
+            class="form-label">
+
+            Description
+
+          </label>
+
+          <textarea
+            id="taskDescription"
+            class="form-control"
+            name="description"
+            rows="4"
+            [(ngModel)]="taskForm.description"
+            placeholder="Describe the task">
+
+          </textarea>
+
+        </div>
+
+
+        <!-- Employee -->
+
+        <div class="mb-3">
+
+          <label
+            for="assignee"
+            class="form-label">
+
+            Assign To
+
+          </label>
+
+          <select
+            id="assignee"
+            class="form-select"
+            name="assignee"
+            [(ngModel)]="taskForm.assignee"
+            required>
+
+            <option
+              value=""
+              disabled>
+
+              Select employee
+
+            </option>
+
+            @for (
+              employee of employees;
+              track employee._id
+            ) {
+
+              <option
+                [value]="employee._id">
+
+                {{ employee.name }}
+                —
+                {{ employee.department }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- Priority -->
+
+        <div class="mb-3">
+
+          <label
+            for="priority"
+            class="form-label">
+
+            Priority
+
+          </label>
+
+          <select
+            id="priority"
+            class="form-select"
+            name="priority"
+            [(ngModel)]="taskForm.priority">
+
+            <option value="low">
+              Low
+            </option>
+
+            <option value="medium">
+              Medium
+            </option>
+
+            <option value="high">
+              High
+            </option>
+
+            <option value="urgent">
+              Urgent
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- Request -->
+
+        <div class="mb-4">
+
+          <label
+            for="request"
+            class="form-label">
+
+            Related Request
+            <span class="text-muted">
+              (Optional)
+            </span>
+
+          </label>
+
+          <select
+            id="request"
+            class="form-select"
+            name="requestId"
+            [(ngModel)]="taskForm.requestId">
+
+            <option value="">
+              No related request
+            </option>
+
+            @for (
+              request of approvedRequests;
+              track request._id
+            ) {
+
+              <option
+                [value]="request._id">
+
+                {{ request.title }}
+
+              </option>
+
+            }
+
+          </select>
+
+          <small class="text-muted">
+            Only approved requests are available.
+          </small>
+
+        </div>
+
+
+        <!-- Buttons -->
+
+        <div class="d-flex gap-2">
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isCreatingTask">
+
+            @if (isCreatingTask) {
+
+              <span
+                class="spinner-border spinner-border-sm me-2">
+              </span>
+
+              Creating...
+
+            } @else {
+
+              <i class="bi bi-clipboard-plus me-2"></i>
+
+              Create Task
+
+            }
+
+          </button>
+
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="closeCreateTask()"
+            [disabled]="isCreatingTask">
+
+            Cancel
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  }
+
+
+  <!-- Loading -->
+
+  @if (isLoading) {
+
+    <div class="loading-container">
+
+      <span class="spinner-border"></span>
+
+      <p>
+        Loading tasks...
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- Error -->
+
+  @if (errorMessage) {
+
+    <div class="alert alert-danger">
+
+      <i class="bi bi-exclamation-circle me-2"></i>
+
+      {{ errorMessage }}
+
+    </div>
+
+  }
+
+
+  <!-- Tasks -->
+
+  @if (!isLoading && !errorMessage) {
+
+    @if (tasks.length === 0) {
+
+      <div class="empty-state">
+
+        <i class="bi bi-clipboard-x"></i>
+
+        <h3>
+          No Tasks Found
+        </h3>
+
+        <p>
+          You don't have any tasks assigned yet.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <div class="tasks-grid">
+
+        @for (
+          task of tasks;
+          track task._id
+        ) {
+
+          <div class="task-card">
+
+            <div class="task-card-header">
+
+              <span
+                class="priority"
+                [class.high]="task.priority === 'high'"
+                [class.urgent]="task.priority === 'urgent'"
+                [class.medium]="task.priority === 'medium'"
+                [class.low]="task.priority === 'low'">
+
+                {{ task.priority | titlecase }}
+
+              </span>
+
+
+              <span
+                class="status"
+                [class.todo]="task.status === 'todo'"
+                [class.in-progress]="
+                  task.status === 'in_progress'
+                "
+                [class.completed]="
+                  task.status === 'completed'
+                ">
+
+                {{ task.status | titlecase }}
+
+              </span>
+
+            </div>
+
+
+            <h2>
+              {{ task.title }}
+            </h2>
+
+
+            <p class="description">
+
+              {{
+                task.description ||
+                'No description provided.'
+              }}
+
+            </p>
+
+
+            <div class="task-info">
+
+              <div>
+
+                <i class="bi bi-person"></i>
+
+                <span>
+                  {{ task.assignee.name }}
+                </span>
+
+              </div>
+
+
+              <div>
+
+                <i class="bi bi-calendar3"></i>
+
+                <span>
+                  {{ task.createdAt | date:'mediumDate' }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <a
+              [routerLink]="['/tasks', task._id]"
+              class="details-button">
+
+              View Details
+
+              <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  }
+
+</div>

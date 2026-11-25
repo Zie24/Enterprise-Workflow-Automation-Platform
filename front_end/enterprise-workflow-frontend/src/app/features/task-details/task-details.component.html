@@ -1,0 +1,331 @@
+<div class="task-details-page">
+
+  @if (isLoading) {
+
+    <div class="loading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+
+      <p>Loading task details...</p>
+    </div>
+
+  }
+
+  @else if (errorMessage) {
+
+    <div class="error-box">
+
+      <p>{{ errorMessage }}</p>
+
+      <button routerLink="/tasks">
+        Back to Tasks
+      </button>
+
+    </div>
+
+  }
+
+  @else if (task) {
+
+    <!-- Header -->
+
+    <div class="page-header">
+
+      <div>
+
+        <p class="section-label">
+          WORK MANAGEMENT
+        </p>
+
+        <h1>{{ task.title }}</h1>
+
+        <span
+          class="status"
+          [class.todo]="task.status === 'todo'"
+          [class.in-progress]="task.status === 'in_progress'"
+          [class.completed]="task.status === 'completed'">
+
+          {{ task.status | titlecase }}
+
+        </span>
+
+      </div>
+
+      <button
+        routerLink="/tasks"
+        class="back-button">
+
+        ← Back to Tasks
+
+      </button>
+
+    </div>
+
+
+    <!-- Task Information -->
+
+    <div class="task-card">
+
+      <div class="section">
+
+        <h3>Task Information</h3>
+
+        <div class="info-row">
+
+          <strong>Description</strong>
+
+          <span>
+            {{ task.description || 'No description provided.' }}
+          </span>
+
+        </div>
+
+        <div class="info-row">
+
+          <strong>Priority</strong>
+
+          <span>
+            {{ task.priority | titlecase }}
+          </span>
+
+        </div>
+
+        <div class="info-row">
+
+          <strong>Status</strong>
+
+          <span>
+            {{ task.status | titlecase }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Assignee -->
+
+      <div class="section">
+
+        <h3>Assigned To</h3>
+
+        <div class="info-row">
+
+          <strong>Name</strong>
+
+          <span>
+            {{ task.assignee.name }}
+          </span>
+
+        </div>
+
+        <div class="info-row">
+
+          <strong>Email</strong>
+
+          <span>
+            {{ task.assignee.email }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Assigned By -->
+
+      <div class="section">
+
+        <h3>Assigned By</h3>
+
+        <div class="info-row">
+
+          <strong>Name</strong>
+
+          <span>
+            {{ task.assignedBy.name }}
+          </span>
+
+        </div>
+
+        <div class="info-row">
+
+          <strong>Email</strong>
+
+          <span>
+            {{ task.assignedBy.email }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+    <!-- Request -->
+
+<div class="section">
+
+  <h3>Related Request</h3>
+
+  @if (task.request) {
+
+    <div class="info-row">
+
+      <strong>Title</strong>
+
+      <span>
+        {{ task.request.title }}
+      </span>
+
+    </div>
+
+    <div class="info-row">
+
+      <strong>Status</strong>
+
+      <span>
+        {{ task.request.status | titlecase }}
+      </span>
+
+    </div>
+
+  } @else {
+
+    <div class="info-row">
+
+      <strong>Request</strong>
+
+      <span>
+        No related request
+      </span>
+
+    </div>
+
+  }
+
+</div>
+
+      <!-- Dates -->
+
+      <div class="section">
+
+        <h3>Dates</h3>
+
+        <div class="info-row">
+
+          <strong>Created At</strong>
+
+          <span>
+            {{ task.createdAt | date:'medium' }}
+          </span>
+
+        </div>
+
+        <div class="info-row">
+
+          <strong>Last Updated</strong>
+
+          <span>
+            {{ task.updatedAt | date:'medium' }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+        <!-- Actions -->
+
+    <div class="actions">
+
+      @if (currentUserRole === 'employee') {
+
+        @if (task.status === 'todo') {
+
+          <button
+            type="button"
+            class="start-button"
+            (click)="startTask()"
+            [disabled]="isActionLoading">
+
+            @if (isActionLoading) {
+              Processing...
+            } @else {
+              <i class="bi bi-play-fill me-2"></i>
+              Start Task
+            }
+
+          </button>
+
+        }
+
+        @if (task.status === 'in_progress') {
+
+          <button
+            type="button"
+            class="complete-button"
+            (click)="completeTask()"
+            [disabled]="isActionLoading">
+
+            @if (isActionLoading) {
+              Processing...
+            } @else {
+              <i class="bi bi-check2-circle me-2"></i>
+              Mark as Completed
+            }
+
+          </button>
+
+        }
+
+      }
+
+      @if (task.status === 'completed') {
+
+        <div class="completed-message">
+
+          <i class="bi bi-check-circle-fill"></i>
+
+          Task completed successfully.
+
+        </div>
+
+      }
+
+      @if (
+        currentUserRole === 'manager' ||
+        currentUserRole === 'admin'
+      ) {
+
+        @if (task.status !== 'completed') {
+
+          <div class="manager-status">
+
+            <i class="bi bi-info-circle me-2"></i>
+
+            Current status:
+            <strong>{{ task.status | titlecase }}</strong>
+
+          </div>
+
+        }
+
+      }
+
+    </div>
+
+    @if (actionMessage) {
+
+      <p class="action-message">
+        {{ actionMessage }}
+      </p>
+
+    }
+
+  }
+
+</div>

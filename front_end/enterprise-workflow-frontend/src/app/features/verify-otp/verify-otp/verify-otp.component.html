@@ -1,0 +1,49 @@
+<div class="otp-page">
+  <div class="otp-card">
+    <div class="otp-icon">
+      <i class="bi bi-envelope-check"></i>
+    </div>
+    <h3>Verify your email</h3>
+    <p class="otp-sub">
+      We sent a 6-digit code to <b>{{ maskedEmail }}</b>
+    </p>
+
+    <div class="otp-inputs" (paste)="onPaste($event)">
+      @for (digit of digits(); track $index; let i = $index) {
+        <input
+          #otpInput
+          type="text"
+          maxlength="1"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          [attr.aria-label]="'Digit ' + (i + 1)"
+          [value]="digit"
+          [class.filled]="digit"
+          [class.has-error]="error()"
+          (input)="onInput(i, $event)"
+          (keydown)="onKeydown(i, $event)"
+        />
+      }
+    </div>
+
+    @if (error()) {
+      <p class="otp-error">{{ error() }}</p>
+    }
+    @if (success()) {
+      <p class="otp-success">{{ success() }}</p>
+    }
+
+    <button class="btn btn-primary w-100" (click)="submit()" [disabled]="loading()">
+      {{ loading() ? 'Verifying...' : 'Verify' }}
+    </button>
+
+    <p class="otp-resend">
+      Didn't receive the code?
+      <button class="btn btn-link p-0" [disabled]="cooldown() > 0" (click)="resend()">
+        Resend {{ cooldown() > 0 ? '(' + cooldown() + 's)' : '' }}
+      </button>
+    </p>
+
+    <a routerLink="/login" class="otp-back">← Back to login</a>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+<div class="teams-page">
+
+  <div class="page-header">
+
+    <div>
+      <p class="section-label">WORKSPACE</p>
+
+      <h1>Teams</h1>
+
+      <p class="page-subtitle">
+        View team members and their roles across the organization.
+      </p>
+    </div>
+
+  </div>
+
+
+  @if (isLoading) {
+
+    <div class="loading-container">
+
+      <span class="spinner-border"></span>
+
+      <p>Loading team members...</p>
+
+    </div>
+
+  }
+
+
+  @if (errorMessage) {
+
+    <div class="alert alert-danger">
+
+      <i class="bi bi-exclamation-circle me-2"></i>
+
+      {{ errorMessage }}
+
+    </div>
+
+  }
+
+
+  @if (!isLoading && !errorMessage) {
+
+    @if (members.length === 0) {
+
+      <div class="empty-state">
+
+        <i class="bi bi-people"></i>
+
+        <h3>No Team Members</h3>
+
+        <p>
+          There are no active team members at the moment.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <div class="team-grid">
+
+        @for (member of members; track member._id) {
+
+          <div class="member-card">
+
+            <div class="member-top">
+
+              <div class="member-avatar">
+                <i class="bi bi-person-fill"></i>
+              </div>
+
+              <span
+                class="status"
+                [class.active]="member.isActive">
+
+                {{ member.isActive ? 'Active' : 'Inactive' }}
+
+              </span>
+
+            </div>
+
+
+            <div class="member-info">
+
+              <h2>{{ member.name }}</h2>
+
+              <p class="role">
+                {{ member.role | titlecase }}
+              </p>
+
+              <p class="email">
+                <i class="bi bi-envelope"></i>
+                {{ member.email }}
+              </p>
+
+              <p class="department">
+                <i class="bi bi-building"></i>
+                {{ member.department }}
+              </p>
+
+            </div>
+
+
+            <div class="member-footer">
+
+              <span>
+                <i class="bi bi-person-badge"></i>
+                {{ member.role | titlecase }}
+              </span>
+
+              <span>
+                {{ member.department }}
+              </span>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  }
+
+</div>

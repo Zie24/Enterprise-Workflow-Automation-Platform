@@ -1,0 +1,101 @@
+/* =====================================================
+   ضيفي ده في src/styles.css (بعد استيراد Bootstrap)
+   وامسحي الـ :root و [data-bs-theme] اللي ضفتيهم قبل كده
+   ===================================================== */
+
+:root,
+[data-bs-theme="light"] {
+  /* Surfaces */
+  --bg-main: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --border-color: #e9ecef;
+
+  /* Text */
+  --text-main: #343a40;
+  --text-muted: #6c757d;
+
+  /* Brand */
+  --primary: #950020;
+  --primary-hover: #7a001a;
+  --primary-soft: #f8e6ea;
+  --primary-softer: #fff5f7;
+  --on-primary: #ffffff;
+
+  --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* Bootstrap tokens */
+  --bs-body-bg: var(--bg-main);
+  --bs-body-color: var(--text-main);
+  --bs-border-color: var(--border-color);
+  --bs-secondary-color: var(--text-muted);
+}
+
+[data-bs-theme="dark"] {
+  /* Surfaces */
+  --bg-main: #181818;
+  --bg-card: #1f1f1f;
+  --bg-elevated: #242424;
+  --border-color: #333333;
+
+  /* Text */
+  --text-main: #f5f5f5;
+  --text-muted: #9e9e9e;
+
+  /* Brand */
+  --primary: #ff6b8a;
+  --primary-hover: #ff8fa6;
+  --primary-soft: #35151e;
+  --primary-softer: #2d171d;
+  --on-primary: #1a1a1a;
+
+  --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.4);
+
+  /* Bootstrap tokens */
+  --bs-body-bg: var(--bg-main);
+  --bs-body-color: var(--text-main);
+  --bs-border-color: var(--border-color);
+  --bs-secondary-color: var(--text-muted);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ---------- Bootstrap components تاخد لون المشروع ---------- */
+
+.btn-primary {
+  --bs-btn-bg: var(--primary);
+  --bs-btn-border-color: var(--primary);
+  --bs-btn-color: var(--on-primary);
+  --bs-btn-hover-bg: var(--primary-hover);
+  --bs-btn-hover-border-color: var(--primary-hover);
+  --bs-btn-hover-color: var(--on-primary);
+  --bs-btn-active-bg: var(--primary-hover);
+  --bs-btn-active-border-color: var(--primary-hover);
+  --bs-btn-active-color: var(--on-primary);
+  --bs-btn-disabled-bg: var(--primary);
+  --bs-btn-disabled-border-color: var(--primary);
+  --bs-btn-disabled-color: var(--on-primary);
+}
+
+.btn-link {
+  --bs-btn-color: var(--primary);
+  --bs-btn-hover-color: var(--primary-hover);
+}
+
+.card {
+  --bs-card-bg: var(--bg-card);
+  --bs-card-border-color: var(--border-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+a {
+  color: var(--primary);
+}

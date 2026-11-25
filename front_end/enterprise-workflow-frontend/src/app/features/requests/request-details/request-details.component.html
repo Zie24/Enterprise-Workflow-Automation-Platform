@@ -1,0 +1,259 @@
+<div class="request-details-page">
+
+  @if (isLoading) {
+
+    <div class="loading">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+
+      <p>Loading request details...</p>
+    </div>
+
+  } @else if (errorMessage) {
+
+    <div class="error-box">
+      <p>{{ errorMessage }}</p>
+
+      <button routerLink="/requests">
+        Back to Requests
+      </button>
+    </div>
+
+  } @else if (request) {
+
+    <!-- Page Header -->
+    <div class="page-header">
+
+      <div>
+        <h2>{{ request.title }}</h2>
+
+        <span class="status">
+          {{ request.status }}
+        </span>
+      </div>
+
+      <button
+        routerLink="/requests"
+        class="back-button">
+        ← Back to Requests
+      </button>
+
+    </div>
+
+
+    <!-- Request Details Card -->
+    <div class="request-card">
+
+      <!-- Request Information -->
+      <div class="section">
+
+        <h3>Request Information</h3>
+
+        <div class="info-row">
+          <strong>Description</strong>
+          <span>{{ request.description }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Department</strong>
+          <span>{{ request.department }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Priority</strong>
+          <span>{{ request.priority }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Status</strong>
+          <span>{{ request.status }}</span>
+        </div>
+
+      </div>
+
+
+      <!-- Requester -->
+      <div class="section">
+
+        <h3>Requester</h3>
+
+        <div class="info-row">
+          <strong>Name</strong>
+          <span>{{ request.requester.name }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Email</strong>
+          <span>{{ request.requester.email }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Role</strong>
+          <span>{{ request.requester.role }}</span>
+        </div>
+
+      </div>
+
+
+      <!-- Approver -->
+      @if (request.approver) {
+
+        <div class="section">
+
+          <h3>Approver</h3>
+
+          <div class="info-row">
+            <strong>Name</strong>
+            <span>{{ request.approver.name }}</span>
+          </div>
+
+          <div class="info-row">
+            <strong>Email</strong>
+            <span>{{ request.approver.email }}</span>
+          </div>
+
+          <div class="info-row">
+            <strong>Role</strong>
+            <span>{{ request.approver.role }}</span>
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- Rejection Reason -->
+      @if (request.rejectionReason) {
+
+        <div class="section">
+
+          <h3>Rejection Reason</h3>
+
+          <div class="info-row">
+            <strong>Reason</strong>
+            <span>{{ request.rejectionReason }}</span>
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- Dates -->
+      <div class="section">
+
+        <h3>Dates</h3>
+
+        <div class="info-row">
+          <strong>Created At</strong>
+          <span>
+            {{ request.createdAt | date:'medium' }}
+          </span>
+        </div>
+
+        <div class="info-row">
+          <strong>Last Updated</strong>
+          <span>
+            {{ request.updatedAt | date:'medium' }}
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Actions -->
+    <div class="actions">
+
+      <button
+        type="button"
+        class="approve-button"
+        (click)="approveRequest()"
+        [disabled]="isActionLoading">
+
+        @if (isActionLoading) {
+          Processing...
+        } @else {
+          Approve
+        }
+
+      </button>
+
+
+      <button
+        type="button"
+        class="reject-button"
+        (click)="showRejectForm = true"
+        [disabled]="isActionLoading">
+
+        Reject
+
+      </button>
+
+    </div>
+
+
+    <!-- Reject Form -->
+    @if (showRejectForm) {
+
+      <div class="reject-form">
+
+        <label for="rejectionReason">
+          Rejection Reason
+        </label>
+
+        <textarea
+          id="rejectionReason"
+          [(ngModel)]="rejectionReason"
+          placeholder="Enter rejection reason">
+        </textarea>
+
+
+        <div class="reject-form-actions">
+
+          <button
+            type="button"
+            class="confirm-reject-button"
+            (click)="rejectRequest()"
+            [disabled]="isActionLoading">
+
+            @if (isActionLoading) {
+              Processing...
+            } @else {
+              Confirm Reject
+            }
+
+          </button>
+
+
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="showRejectForm = false"
+            [disabled]="isActionLoading">
+
+            Cancel
+
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- Action Message -->
+    @if (actionMessage) {
+
+      <p class="action-message">
+        {{ actionMessage }}
+      </p>
+
+    }
+
+  }
+
+</div>

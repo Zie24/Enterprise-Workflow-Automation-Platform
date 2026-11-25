@@ -1,0 +1,174 @@
+<div class="dashboard-page">
+
+  <!-- Welcome Section -->
+  <section class="welcome-section">
+
+    <div>
+      <p class="welcome-label">ENTERPRISE WORKSPACE</p>
+
+      <h1>Welcome back</h1>
+
+      <p class="welcome-text">
+        Manage your requests, approvals, and enterprise workflows
+        from one place.
+      </p>
+    </div>
+
+    <a routerLink="/requests/create" routerLinkActive="active" class="create-button">
+      + Create Request
+    </a>
+
+  </section>
+
+
+  <!-- Statistics -->
+  <section class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+
+      <div>
+        <p>{{firstStatLabel}}</p>
+        <h2> {{ firstStatCount }}</h2>
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+
+      <div>
+        <p>{{ secondStatLabel }}</p>
+        <h2>{{ secondStatCount }}</h2>
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <div class="stat-icon">✓</div>
+
+      <div>
+        <p>{{ thirdStatLabel }}</p>
+        <h2>{{ thirdStatCount }}</h2>
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <div class="stat-icon">✕</div>
+
+      <div>
+        <p>{{ fourthStatLabel }}</p>
+        <h2>{{ fourthStatCount }}</h2>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- Main Content -->
+  <section class="dashboard-content">
+
+    <!-- Quick Actions -->
+    <div class="content-card">
+
+      <div class="card-header">
+        <div>
+          <p class="section-label">QUICK ACCESS</p>
+          <h2>Get started</h2>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+
+        <a routerLink="/requests" class="quick-action">
+          <span class="action-icon">📋</span>
+
+          <div>
+            <h3>Requests</h3>
+            <p>View and manage requests</p>
+          </div>
+
+          <span class="arrow">→</span>
+        </a>
+
+
+        <a routerLink="/requests/create" class="quick-action">
+          <span class="action-icon">＋</span>
+
+          <div>
+            <h3>Create Request</h3>
+            <p>Submit a new enterprise request</p>
+          </div>
+
+          <span class="arrow">→</span>
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- Recent Requests -->
+    <div class="content-card">
+
+      <div class="card-header">
+
+        <div>
+          <p class="section-label">ACTIVITY</p>
+          <h2>Recent Requests</h2>
+        </div>
+
+        <a routerLink="/requests" class="view-all">
+          View all
+        </a>
+
+      </div>
+
+
+      <div class="request-item">
+
+        <div class="request-info">
+          <h3>New Laptop</h3>
+          <p>IT Department</p>
+        </div>
+
+        <span class="status submitted">
+          Submitted
+        </span>
+
+      </div>
+
+
+      <div class="request-item">
+
+        <div class="request-info">
+          <h3>Software Access</h3>
+          <p>Development Department</p>
+        </div>
+
+        <span class="status approved">
+          Approved
+        </span>
+
+      </div>
+
+
+      <div class="request-item">
+
+        <div class="request-info">
+          <h3>Office Equipment</h3>
+          <p>HR Department</p>
+        </div>
+
+        <span class="status rejected">
+          Rejected
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

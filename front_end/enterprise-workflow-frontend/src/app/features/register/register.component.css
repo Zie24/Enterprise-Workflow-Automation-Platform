@@ -1,0 +1,64 @@
+.register-icon {
+  width: 60px;
+  height: 60px;
+  margin: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #950020;
+  color: white;
+
+  border-radius: 12px;
+  font-size: 28px;
+}
+
+.register-btn {
+  background-color: #950020;
+  color: white;
+  border: none;
+  padding: 11px;
+  font-weight: 600;
+}
+
+.register-btn:hover {
+  background-color: #78001a;
+  color: white;
+}
+
+.register-btn:disabled {
+  opacity: 0.7;
+}
+
+.form-control:focus {
+  border-color: #950020;
+  box-shadow: 0 0 0 0.2rem rgba(149, 0, 32, 0.15);
+}
+
+.input-group-text {
+  border-right: 0;
+}
+
+.input-group .form-control {
+  border-left: 0;
+}
+
+.login-link {
+  color: #950020;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+.password-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.password-requirements small {
+  font-size: 13px;
+}

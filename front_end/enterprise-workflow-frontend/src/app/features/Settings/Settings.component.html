@@ -1,0 +1,325 @@
+    <app-navbar></app-navbar>
+
+<div class="settings-page">
+  <h2 class="settings-title">Settings</h2>
+
+  @if (loading()) {
+    <p class="settings-muted">Loading...</p>
+  } @else {
+    <div class="settings-layout">
+
+      <nav class="settings-tabs" aria-label="Settings sections">
+        @for (tab of tabs; track tab.id) {
+          <button
+            type="button"
+            class="settings-tab"
+            [class.active]="activeTab() === tab.id"
+            (click)="selectTab(tab.id)"
+          >
+            <i class="bi" [class]="'bi ' + tab.icon"></i>
+            <span>{{ tab.label }}</span>
+          </button>
+        }
+      </nav>
+
+      <section class="settings-panel">
+
+        @if (notice(); as n) {
+          <div
+            class="alert"
+            [class]="'alert alert-' + n.type"
+            role="alert"
+          >
+            {{ n.text }}
+          </div>
+        }
+
+        <!-- Profile -->
+        @if (activeTab() === 'profile') {
+          <h4>Profile</h4>
+          <p class="settings-muted">
+            Update your personal information.
+          </p>
+
+          <!-- Profile Avatar -->
+          <div class="avatar-row">
+
+            <div class="avatar">
+              @if (settings()?.avatar; as avatar) {
+                <img
+                  [src]="apiOrigin + avatar"
+                  alt="Profile photo"
+                />
+              } @else {
+                <span>{{ initials() }}</span>
+              }
+            </div>
+
+            <div class="avatar-actions">
+
+              <input
+                #avatarInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                (change)="onAvatarSelected($event)"
+              />
+
+              <div class="d-flex gap-2">
+
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  [disabled]="avatarUploading()"
+                  (click)="avatarInput.click()"
+                >
+                  {{
+                    avatarUploading()
+                      ? 'Uploading...'
+                      : 'Change photo'
+                  }}
+                </button>
+
+                @if (settings()?.avatar) {
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    [disabled]="avatarUploading()"
+                    (click)="removeAvatar()"
+                  >
+                    Remove
+                  </button>
+                }
+
+              </div>
+
+              <small class="settings-muted d-block mt-2">
+                JPG, PNG or WebP, up to 2MB.
+              </small>
+
+            </div>
+          </div>
+
+          <!-- Profile Form -->
+          <form
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()"
+            novalidate
+          >
+
+            <div class="mb-3">
+              <label class="form-label" for="name">
+                Full name
+              </label>
+
+              <input
+                id="name"
+                class="form-control"
+                formControlName="name"
+                [class.is-invalid]="
+                  profileForm.controls.name.invalid &&
+                  profileForm.controls.name.touched
+                "
+              />
+
+              @if (
+                profileForm.controls.name.invalid &&
+                profileForm.controls.name.touched
+              ) {
+                <div class="invalid-feedback">
+                  Name must be 2 to 60 characters.
+                </div>
+              }
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="phone">
+                  Phone
+                </label>
+
+                <input
+                  id="phone"
+                  class="form-control"
+                  formControlName="phone"
+                  inputmode="tel"
+                />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="jobTitle">
+                  Job title
+                </label>
+
+                <input
+                  id="jobTitle"
+                  class="form-control"
+                  formControlName="jobTitle"
+                />
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Email</label>
+                <input
+                  class="form-control"
+                  [value]="settings()?.email"
+                  disabled
+                />
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Role</label>
+                <input
+                  class="form-control text-capitalize"
+                  [value]="settings()?.role"
+                  disabled
+                />
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Department</label>
+                <input
+                  class="form-control"
+                  [value]="settings()?.department"
+                  disabled
+                />
+              </div>
+
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="saving()"
+            >
+              {{ saving() ? 'Saving...' : 'Save changes' }}
+            </button>
+
+          </form>
+        }
+
+        <!-- Security -->
+        @if (activeTab() === 'security') {
+          <h4>Security</h4>
+          <p class="settings-muted">
+            Change your password.
+          </p>
+
+          <form
+            [formGroup]="passwordForm"
+            (ngSubmit)="changePassword()"
+            novalidate
+          >
+
+            <div class="mb-3">
+              <label class="form-label" for="currentPassword">
+                Current password
+              </label>
+
+              <input
+                id="currentPassword"
+                type="password"
+                class="form-control"
+                formControlName="currentPassword"
+                autocomplete="current-password"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="newPassword">
+                New password
+              </label>
+
+              <input
+                id="newPassword"
+                type="password"
+                class="form-control"
+                formControlName="newPassword"
+                autocomplete="new-password"
+              />
+            </div>
+
+            <ul class="password-rules">
+              <li [class.ok]="hasMinLength">
+                At least 8 characters
+              </li>
+              <li [class.ok]="hasUppercase">
+                One uppercase letter
+              </li>
+              <li [class.ok]="hasLowercase">
+                One lowercase letter
+              </li>
+              <li [class.ok]="hasNumber">
+                One number
+              </li>
+              <li [class.ok]="hasSpecialChar">
+                One special character
+              </li>
+            </ul>
+
+            <div class="mb-3">
+              <label class="form-label" for="confirmPassword">
+                Confirm new password
+              </label>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+                autocomplete="new-password"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="saving()"
+            >
+              {{ saving() ? 'Updating...' : 'Update password' }}
+            </button>
+
+          </form>
+        }
+
+        <!-- Appearance -->
+        @if (activeTab() === 'appearance') {
+          <h4>Appearance</h4>
+          <p class="settings-muted">
+            Choose how the platform looks for you.
+          </p>
+
+          <div
+            class="theme-options"
+            role="radiogroup"
+            aria-label="Theme"
+          >
+            @for (t of themes; track t.value) {
+              <button
+                type="button"
+                class="theme-option"
+                role="radio"
+                [attr.aria-checked]="
+                  themeService.theme() === t.value
+                "
+                [class.selected]="
+                  themeService.theme() === t.value
+                "
+                (click)="selectTheme(t.value)"
+              >
+                <i class="bi" [class]="'bi ' + t.icon"></i>
+                <span>{{ t.label }}</span>
+              </button>
+            }
+          </div>
+        }
+
+      </section>
+    </div>
+  }
+</div>

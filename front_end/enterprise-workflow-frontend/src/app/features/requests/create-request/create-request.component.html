@@ -1,0 +1,229 @@
+<div class="container py-5">
+
+  <div class="row justify-content-center">
+
+    <div class="col-12 col-lg-8">
+
+      <div class="card border-0 shadow-sm">
+
+        <!-- Header -->
+        <div class="card-body p-4 p-md-5">
+
+          <div class="mb-4">
+
+            <span class="section-label">
+              NEW REQUEST
+            </span>
+
+            <h2 class="fw-bold mb-2">
+              Create Request
+            </h2>
+
+            <p class="text-muted mb-0">
+              Submit a new request and track its progress.
+            </p>
+
+          </div>
+
+
+          <form (ngSubmit)="createRequest()">
+
+            <!-- Title -->
+            <div class="mb-4">
+
+              <label
+                for="title"
+                class="form-label fw-semibold"
+              >
+                Request Title
+              </label>
+
+              <input
+                id="title"
+                type="text"
+                name="title"
+                class="form-control"
+                [(ngModel)]="request.title"
+                placeholder="e.g. New Laptop"
+              >
+
+            </div>
+
+
+            <!-- Description -->
+            <div class="mb-4">
+
+              <label
+                for="description"
+                class="form-label fw-semibold"
+              >
+                Description
+              </label>
+
+              <textarea
+                id="description"
+                name="description"
+                class="form-control"
+                rows="5"
+                [(ngModel)]="request.description"
+                placeholder="Describe your request..."
+              ></textarea>
+
+            </div>
+
+
+            <!-- Priority + Department -->
+            <div class="row">
+
+              <div class="col-md-6 mb-4">
+
+                <label
+                  for="priority"
+                  class="form-label fw-semibold"
+                >
+                  Priority
+                </label>
+
+                <select
+                  id="priority"
+                  name="priority"
+                  class="form-select"
+                  [(ngModel)]="request.priority"
+                >
+
+                  <option value="">
+                    Select priority
+                  </option>
+
+                  <option value="low">
+                    Low
+                  </option>
+
+                  <option value="medium">
+                    Medium
+                  </option>
+
+                  <option value="high">
+                    High
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="col-md-6 mb-4">
+
+                <label
+                  for="department"
+                  class="form-label fw-semibold"
+                >
+                  Department
+                </label>
+
+                <select
+                  id="department"
+                  name="department"
+                  class="form-select"
+                  [(ngModel)]="request.department"
+                >
+
+                  <option value="">
+                    Select department
+                  </option>
+
+                  <option value="IT">
+                    IT
+                  </option>
+
+                  <option value="HR">
+                    HR
+                  </option>
+
+                  <option value="Finance">
+                    Finance
+                  </option>
+
+                  <option value="Marketing">
+                    Marketing
+                  </option>
+
+                  <option value="Operations">
+                    Operations
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <!-- Error -->
+            @if (errorMessage) {
+
+              <div
+                class="alert alert-danger"
+                role="alert"
+              >
+                {{ errorMessage }}
+              </div>
+
+            }
+
+
+            <!-- Success -->
+            @if (successMessage) {
+
+              <div
+                class="alert alert-success"
+                role="alert"
+              >
+                {{ successMessage }}
+              </div>
+
+            }
+
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
+              <a
+                routerLink="/requests"
+                class="btn btn-light px-4"
+              >
+                Cancel
+              </a>
+
+              <button
+                type="submit"
+                class="btn create-btn px-4"
+                [disabled]="isLoading"
+              >
+
+                @if (isLoading) {
+                  <span
+                    class="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+
+                  Creating...
+                } @else {
+                  Create Request
+                }
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
